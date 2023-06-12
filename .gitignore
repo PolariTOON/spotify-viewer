@@ -1,0 +1,4 @@
+/package-lock.json
+/back/bin/**/*.js
+/front/bin/**/*.js
+/node_modules

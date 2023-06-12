@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "outDir": "bin",
+    "rootDir": "src",
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "target": "esnext"
+  }
+}
