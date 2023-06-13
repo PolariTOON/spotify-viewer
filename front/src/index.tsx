@@ -1,9 +1,9 @@
 import type {LazyExoticComponent} from "react";
 import type {Root} from "react-dom/client";
 import type {TracksItem, TracksItemTrack, TracksItemTrackAlbum, TracksItemTrackAlbumImage} from "./index.helpers.ts";
-import React, {Fragment, Suspense, lazy} from "react";
+import React, {Fragment, Suspense, lazy, useState} from "react";
 import {createRoot} from "react-dom/client";
-import {authorize, listSavedTracks} from "./index.helpers.ts";
+import {authorize, listSavedTracks, removeSavedTrack} from "./index.helpers.ts";
 type TrackProps = {
 	track: TracksItemTrack,
 };
@@ -22,8 +22,41 @@ if (accessToken == null) {
 	throw new Error("No access token");
 }
 const Track: ({track}: TrackProps) => JSX.Element = ({track}: TrackProps): JSX.Element => {
+	const [disabled, setDisabled]: [boolean, (liked: boolean) => void] = useState(false);
+	const unlike: () => Promise<void> = async (): Promise<void> => {
+		setDisabled(true);
+		try {
+			await removeSavedTrack(accessToken, track.id);
+		} catch (error: unknown) {
+			block: {
+				if (error != null && typeof error === "object" && "message" in error) {
+					const message: unknown = error.message;
+					if (typeof message === "string") {
+						console.warn(message);
+						break block;
+					}
+				}
+				console.warn("Unknown error");
+			}
+		}
+		setDisabled(false);
+	};
 	return <>
 		<p>{track.name}</p>
+		<menu>
+			<li>
+				<p>
+					<button
+						type="button"
+						value=""
+						disabled={disabled}
+						onClick={unlike}
+					>
+						Enlever des Titres likés
+					</button>
+				</p>
+			</li>
+		</menu>
 	</>;
 };
 const Image: ({image, name}: ImageProps) => JSX.Element = ({image, name}: ImageProps): JSX.Element => {
