@@ -7,7 +7,21 @@ type Token = {
 type TracksError = {
 	message: string,
 };
-export type TracksItem = {};
+export type TracksItemTrackAlbumImage = {
+	height: number | null,
+	width: number | null,
+	url: string,
+};
+export type TracksItemTrackAlbum = {
+	images: TracksItemTrackAlbumImage[],
+	name: string,
+};
+type TracksItemTrack = {
+	album: TracksItemTrackAlbum,
+};
+export type TracksItem = {
+	track: TracksItemTrack,
+};
 type Tracks = {
 	items: TracksItem[],
 	next: string | null,
