@@ -109,7 +109,7 @@ const Album: ({album}: AlbumProps) => JSX.Element = ({album}: AlbumProps): JSX.E
 	const name: string = album.name;
 	return <>
 		{
-			images.length != 0 && <>
+			images.length !== 0 && <>
 				<Image image={images[0]} name={name} />
 			</>
 		}
@@ -127,17 +127,17 @@ const Library: LazyExoticComponent<({}: LibraryProps) => JSX.Element> = lazy(asy
 			{
 				items.length !== 0 && <>
 					<Album album={items[0].track.album} />
+					<ul className="list">
+						{items.map((item: TracksItem): JSX.Element => {
+							return <Fragment key={item.track.id}>
+								<li>
+									<Track track={item.track} />
+								</li>
+							</Fragment>;
+						})}
+					</ul>
 				</>
 			}
-			<ul className="list">
-				{items.map((item: TracksItem): JSX.Element => {
-					return <Fragment key={item.track.id}>
-						<li>
-							<Track track={item.track} />
-						</li>
-					</Fragment>;
-				})}
-			</ul>
 		</>;
 	}
 	return {
