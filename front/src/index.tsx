@@ -19,7 +19,7 @@ const Library: LazyExoticComponent<({}: LibraryProps) => JSX.Element> = lazy(asy
 	}
 	function Library({}: LibraryProps): JSX.Element {
 		return <>
-			<p>Les musiques Spotify ont été chargées</p>
+			<p>Les {items.length} musiques Spotify ont été chargées</p>
 		</>;
 	}
 	return {
