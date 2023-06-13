@@ -136,3 +136,21 @@ export async function removeSavedTrack(accessToken: string, id: string): Promise
 		throw new Error(json.message);
 	}
 }
+export async function addSavedTrack(accessToken: string, id: string): Promise<void> {
+	const url: string = "https://api.spotify.com/v1/me/tracks";
+	const query: string = JSON.stringify({
+		ids: [id],
+	});
+	const response: Response = await fetch(url, {
+		body: query,
+		headers: {
+			"authorization": `Bearer ${accessToken}`,
+			"content-type": "application/json",
+		},
+		method: "PUT",
+	});
+	if (!response.ok) {
+		const json: TracksError = await response.json();
+		throw new Error(json.message);
+	}
+}

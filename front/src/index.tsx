@@ -3,7 +3,7 @@ import type {Root} from "react-dom/client";
 import type {TracksItem, TracksItemTrack, TracksItemTrackAlbum, TracksItemTrackAlbumImage} from "./index.helpers.ts";
 import React, {Fragment, Suspense, lazy, useState} from "react";
 import {createRoot} from "react-dom/client";
-import {authorize, listSavedTracks, removeSavedTrack} from "./index.helpers.ts";
+import {addSavedTrack, authorize, listSavedTracks, removeSavedTrack} from "./index.helpers.ts";
 type TrackProps = {
 	track: TracksItemTrack,
 };
@@ -23,10 +23,31 @@ if (accessToken == null) {
 }
 const Track: ({track}: TrackProps) => JSX.Element = ({track}: TrackProps): JSX.Element => {
 	const [disabled, setDisabled]: [boolean, (liked: boolean) => void] = useState(false);
+	const [liked, setLiked]: [boolean, (liked: boolean) => void] = useState(true);
 	const unlike: () => Promise<void> = async (): Promise<void> => {
 		setDisabled(true);
 		try {
 			await removeSavedTrack(accessToken, track.id);
+			setLiked(false);
+		} catch (error: unknown) {
+			block: {
+				if (error != null && typeof error === "object" && "message" in error) {
+					const message: unknown = error.message;
+					if (typeof message === "string") {
+						console.warn(message);
+						break block;
+					}
+				}
+				console.warn("Unknown error");
+			}
+		}
+		setDisabled(false);
+	};
+	const like: () => Promise<void> = async (): Promise<void> => {
+		setDisabled(true);
+		try {
+			await addSavedTrack(accessToken, track.id);
+			setLiked(true);
 		} catch (error: unknown) {
 			block: {
 				if (error != null && typeof error === "object" && "message" in error) {
@@ -50,9 +71,15 @@ const Track: ({track}: TrackProps) => JSX.Element = ({track}: TrackProps): JSX.E
 						type="button"
 						value=""
 						disabled={disabled}
-						onClick={unlike}
+						onClick={liked ? unlike : like}
 					>
-						Enlever des Titres likés
+						{
+							liked ? <>
+								Enlever des Titres likés
+							</> : <>
+								Ajouter aux Titres likés
+							</>
+						}
 					</button>
 				</p>
 			</li>
