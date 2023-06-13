@@ -63,10 +63,10 @@ const Track: ({track}: TrackProps) => JSX.Element = ({track}: TrackProps): JSX.E
 		setDisabled(false);
 	};
 	return <>
-		<p>{track.name}</p>
-		<menu>
+		<p className="name">{track.name}</p>
+		<menu className="context">
 			<li>
-				<p>
+				<p className="action">
 					<button
 						type="button"
 						value=""
@@ -91,7 +91,7 @@ const Image: ({image, name}: ImageProps) => JSX.Element = ({image, name}: ImageP
 	const width: number | null = image.width;
 	const height: number | null = image.height;
 	return <>
-		<p>
+		<p className="cover">
 			<picture>
 				<img
 					{...(width != null ? {width} : {})}
@@ -123,13 +123,13 @@ const Library: LazyExoticComponent<({}: LibraryProps) => JSX.Element> = lazy(asy
 	}
 	function Library({}: LibraryProps): JSX.Element {
 		return <>
-			<p>Les {items.length} musiques Spotify ont été chargées</p>
+			<p className="status">Les {items.length} musiques Spotify ont été chargées</p>
 			{
 				items.length !== 0 && <>
 					<Album album={items[0].track.album} />
 				</>
 			}
-			<ul>
+			<ul className="list">
 				{items.map((item: TracksItem): JSX.Element => {
 					return <Fragment key={item.track.id}>
 						<li>
@@ -146,12 +146,12 @@ const Library: LazyExoticComponent<({}: LibraryProps) => JSX.Element> = lazy(asy
 });
 const Loading: ({}: LoadingProps) => JSX.Element = ({}: LoadingProps): JSX.Element => {
 	return <>
-		<p>Chargement en cours</p>
+		<p className="status">Chargement en cours</p>
 	</>;
 };
 const Viewer: ({}: ViewerProps) => JSX.Element = ({}: ViewerProps): JSX.Element => {
 	return <>
-		<h1>Visionneuse Spotify</h1>
+		<h1 className="title">Visionneuse Spotify</h1>
 		<Suspense fallback={<Loading />}>
 			<Library />
 		</Suspense>
