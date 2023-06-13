@@ -4,8 +4,11 @@ type TokenError = {
 type Token = {
 	access_token: string,
 };
-type TracksError = {
+type TracksErrorError = {
 	message: string,
+};
+type TracksError = {
+	error: TracksErrorError,
 };
 export type TracksItemTrackAlbumImage = {
 	height: number | null,
@@ -111,7 +114,7 @@ export async function* listSavedTracks(accessToken: string): AsyncGenerator<Trac
 		});
 		if (!response.ok) {
 			const json: TracksError = await response.json();
-			throw new Error(json.message);
+			throw new Error(json.error.message);
 		}
 		const json: Tracks = await response.json();
 		yield* json.items;
@@ -133,7 +136,7 @@ export async function removeSavedTrack(accessToken: string, id: string): Promise
 	});
 	if (!response.ok) {
 		const json: TracksError = await response.json();
-		throw new Error(json.message);
+		throw new Error(json.error.message);
 	}
 }
 export async function addSavedTrack(accessToken: string, id: string): Promise<void> {
@@ -151,6 +154,6 @@ export async function addSavedTrack(accessToken: string, id: string): Promise<vo
 	});
 	if (!response.ok) {
 		const json: TracksError = await response.json();
-		throw new Error(json.message);
+		throw new Error(json.error.message);
 	}
 }
