@@ -14,6 +14,10 @@ const entryMap: EntryMap = Object.assign(Object.create(null), {
 		pathname: "/index.html",
 		contentType: "text/html; charset=utf-8",
 	},
+	"/favicon.ico": {
+		pathname: "/favicon.svg",
+		contentType: "image/svg+xml; charset=utf-8",
+	},
 	"/index.css": {
 		pathname: "/index.css",
 		contentType: "text/css; charset=utf-8",
