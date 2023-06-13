@@ -4,6 +4,14 @@ type TokenError = {
 type Token = {
 	access_token: string,
 };
+type TracksError = {
+	message: string,
+};
+export type TracksItem = {};
+type Tracks = {
+	items: TracksItem[],
+	next: string | null,
+};
 declare const SPOTIFY_VIEWER_CLIENT_ID: string;
 function generateCodeVerifier(): string {
 	const characterSet: string = "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
@@ -76,4 +84,21 @@ export async function authorize(): Promise<string | null> {
 	sessionStorage.setItem("spotify_viewer_code_verifier", codeVerifier);
 	requestAuthorization(clientId, redirectUrl, codeChallenge);
 	return null;
+}
+export async function* listSavedTracks(accessToken: string): AsyncGenerator<TracksItem, void, undefined> {
+	let url: string | null = "https://api.spotify.com/v1/me/tracks";
+	do {
+		const response: Response = await fetch(url, {
+			headers: {
+				"authorization": `Bearer ${accessToken}`,
+			},
+		});
+		if (!response.ok) {
+			const json: TracksError = await response.json();
+			throw new Error(json.message);
+		}
+		const json: Tracks = await response.json();
+		yield* json.items;
+		url = json.next;
+	} while (url != null);
 }
