@@ -1,9 +1,12 @@
 import type {LazyExoticComponent} from "react";
 import type {Root} from "react-dom/client";
-import type {TracksItem, TracksItemTrackAlbum, TracksItemTrackAlbumImage} from "./index.helpers.ts";
-import React, {Suspense, lazy} from "react";
+import type {TracksItem, TracksItemTrack, TracksItemTrackAlbum, TracksItemTrackAlbumImage} from "./index.helpers.ts";
+import React, {Fragment, Suspense, lazy} from "react";
 import {createRoot} from "react-dom/client";
 import {authorize, listSavedTracks} from "./index.helpers.ts";
+type TrackProps = {
+	track: TracksItemTrack,
+};
 type ImageProps = {
 	image: TracksItemTrackAlbumImage,
 	name: string,
@@ -18,6 +21,11 @@ const accessToken: string | null = await authorize();
 if (accessToken == null) {
 	throw new Error("No access token");
 }
+const Track: ({track}: TrackProps) => JSX.Element = ({track}: TrackProps): JSX.Element => {
+	return <>
+		<p>{track.name}</p>
+	</>;
+};
 const Image: ({image, name}: ImageProps) => JSX.Element = ({image, name}: ImageProps): JSX.Element => {
 	const url: string = image.url;
 	const width: number | null = image.width;
@@ -61,6 +69,15 @@ const Library: LazyExoticComponent<({}: LibraryProps) => JSX.Element> = lazy(asy
 					<Album album={items[0].track.album} />
 				</>
 			}
+			<ul>
+				{items.map((item: TracksItem): JSX.Element => {
+					return <Fragment key={item.track.id}>
+						<li>
+							<Track track={item.track} />
+						</li>
+					</Fragment>;
+				})}
+			</ul>
 		</>;
 	}
 	return {

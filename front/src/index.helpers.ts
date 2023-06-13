@@ -16,8 +16,10 @@ export type TracksItemTrackAlbum = {
 	images: TracksItemTrackAlbumImage[],
 	name: string,
 };
-type TracksItemTrack = {
+export type TracksItemTrack = {
 	album: TracksItemTrackAlbum,
+	id: string,
+	name: string,
 };
 export type TracksItem = {
 	track: TracksItemTrack,
