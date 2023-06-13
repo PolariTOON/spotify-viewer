@@ -13,7 +13,7 @@
   "scripts": {
     "build": "npm run build-back && npm run build-front",
     "build-back": "npx esbuild ./back/src/index.ts --bundle --format=esm --outdir=./back/bin --platform=node --tsconfig=./back/tsconfig.json",
-    "build-front": "npx esbuild ./front/src/index.tsx --bundle --format=esm --minify --outdir=./front/bin --platform=browser --tsconfig=./front/tsconfig.json",
+    "build-front": "npx esbuild ./front/src/index.tsx --bundle --define:SPOTIFY_VIEWER_CLIENT_ID=\\\"$SPOTIFY_VIEWER_CLIENT_ID\\\" --format=esm --minify --outdir=./front/bin --platform=browser --tsconfig=./front/tsconfig.json",
     "lint": "npm run lint-back && npm run lint-front",
     "lint-back": "npx tsc --project ./back",
     "lint-front": "npx tsc --project ./front",
